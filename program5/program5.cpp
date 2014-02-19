@@ -10,37 +10,31 @@ using namespace std;
 void displayIntro();
 int getLowerBoundary();
 int getUpperBoundary();
+void checkBoundaries(int &lowerBound, int &upperBound);
 int *initializeArray(int size);
 int getIndexOfFirstZero(int *primesArray, int size);
+void findMultiplesOfFactors(int factor, int arraySize, int *primesArray);
 void findMultiples(int *startArray, int size, int factor);
 void convertZeroestoOnes(int *primesArray, int size);
 int *getPrimeNumbers(int *primesArray, int size, int &newArraySize);
-void displayPrimeNumbers(int *primeNumbers, int lowerBound, int upperBound);
+void displayPrimeNumbers(int *primeNumbers, int lowerBound, 
+						 int upperBound, int newArraySize);
 
 void main() {
-	int lowerBound, upperBound;
+	int lowerBound, upperBound = 0;
 	int newArraySize = 0;
 	int index = 0;
 	displayIntro();
 	lowerBound = getLowerBoundary();
 	upperBound = getUpperBoundary();
+	checkBoundaries(lowerBound, upperBound);
 	int arraySize = upperBound;
-	while (upperBound <= lowerBound) {
-		cout << "The upper bound is lower than the lower bound!" << endl
-			<< "Please re-enter the boundaries." << endl;
-		lowerBound = getLowerBoundary();
-		upperBound = getUpperBoundary();
-		cout << endl << endl;
-	}
 	int *primesArray = initializeArray(arraySize);
-	int indexOfFirstZero = getIndexOfFirstZero(primesArray, arraySize);
-	while (indexOfFirstZero <= sqrt(arraySize)) {
-		findMultiples(primesArray, arraySize, indexOfFirstZero);
-		indexOfFirstZero = getIndexOfFirstZero(primesArray, arraySize);
-	}
+	int factor = getIndexOfFirstZero(primesArray, arraySize);
+	findMultiplesOfFactors(factor, arraySize, primesArray);
 	convertZeroestoOnes(primesArray, arraySize);
-	int *primeNums = getPrimeNumbers(primesArray, arraySize, newArraySize);
-	displayPrimeNumbers(primeNums, lowerBound, newArraySize);
+	int *primeNumbers = getPrimeNumbers(primesArray, arraySize, newArraySize);
+	displayPrimeNumbers(primeNumbers, lowerBound, upperBound, newArraySize);
 }
 
 void displayIntro() {
@@ -75,6 +69,16 @@ int getUpperBoundary() {
 	return upperBound;
 }
 
+void checkBoundaries(int &lowerBound, int &upperBound) {
+	while (upperBound <= lowerBound) {
+		cout << "The upper bound is lower than the lower bound!" << endl
+			<< "Please re-enter the boundaries." << endl;
+		lowerBound = getLowerBoundary();
+		upperBound = getUpperBoundary();
+		cout << endl << endl;
+	}
+}
+
 int *initializeArray(int size) {
 	int *zeroArray = new int[size];
 	int *last = zeroArray + size;
@@ -96,6 +100,13 @@ int getIndexOfFirstZero(int *primesArray, int size) {
 	}
 	int index = primesArray - start;
 	return index;
+}
+
+void findMultiplesOfFactors(int factor, int arraySize, int *primesArray) {
+	while (factor <= sqrt(arraySize)) {
+		findMultiples(primesArray, arraySize, factor);
+		factor = getIndexOfFirstZero(primesArray, arraySize);
+	}
 }
 
 void findMultiples(int *primesArray, int size, int factor) {
@@ -143,9 +154,12 @@ int *getPrimeNumbers(int *primesArray, int size, int &newArraySize) {
 	return primeNumbersStart;
 }
 
-void displayPrimeNumbers(int *primeNumbers, int lowerBound, int arraySize) {
-	int *start = primeNumbers;
-	int *last = primeNumbers + arraySize;
+void displayPrimeNumbers(int *primeNums, int lowerBound, 
+						 int upperBound, int arraySize) {
+	cout << "Primes between "<<lowerBound<< " and " << upperBound << ": "
+		<< endl << endl;
+	int *start = primeNums;
+	int *last = primeNums + arraySize;
 	while (start < last) {
 		if (*start >= lowerBound) {
 			cout << *start << endl << endl;
