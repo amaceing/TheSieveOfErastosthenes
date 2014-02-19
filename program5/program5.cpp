@@ -1,5 +1,5 @@
 //Anthony Mace CSC240 2/8/14
-//This program demonstrates how to use array
+//This program demonstrates how to use pointer
 //manipulation at the low level in C++. It implements
 //the Sieve of of Eratosthenes algorithm.
 
