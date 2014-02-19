@@ -82,9 +82,11 @@ void checkBoundaries(int &lowerBound, int &upperBound) {
 int *initializeArray(int size) {
 	int *zeroArray = new int[size];
 	int *last = zeroArray + size;
-	zeroArray[0] = -1;
-	zeroArray[1] = -1;
-	int *start = &zeroArray[2];
+	int *firstIndex = zeroArray;
+	*firstIndex = -1;
+	int *secondIndex = zeroArray++;
+	*secondIndex = -1;
+	int *start = zeroArray + 2;
 	while (start < last) {
 		*start = 0;
 		start++;
@@ -110,8 +112,9 @@ void findMultiplesOfFactors(int factor, int arraySize, int *primesArray) {
 }
 
 void findMultiples(int *primesArray, int size, int factor) {
-	primesArray[factor] = 1;
-	int *start = &primesArray[factor + 1];
+	int *factorIndex = primesArray + factor;
+	*factorIndex = 1;
+	int *start = factorIndex + 1;
 	int *last = primesArray + size;
 	while (start < last) {
 		if ((start - primesArray) % factor == 0) {
