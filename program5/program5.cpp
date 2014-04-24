@@ -8,6 +8,8 @@
 using namespace std; 
 
 void displayIntro();
+void quitProg();
+char repeatProcess();
 int getLowerBoundary();
 int getUpperBoundary();
 void checkBoundaries(int &lowerBound, int &upperBound);
@@ -21,26 +23,44 @@ void displayPrimeNumbers(int *primeNumbers, int lowerBound,
 						 int upperBound, int newArraySize);
 
 void main() {
-	int lowerBound, upperBound = 0;
-	int newArraySize = 0;
-	int index = 0;
+	char repeat;
 	displayIntro();
-	lowerBound = getLowerBoundary();
-	upperBound = getUpperBoundary();
-	checkBoundaries(lowerBound, upperBound);
-	int arraySize = upperBound;
-	int *primesArray = initializeArray(arraySize);
-	int factor = getIndexOfFirstZero(primesArray, arraySize);
-	findMultiplesOfFactors(factor, arraySize, primesArray);
-	convertZeroestoOnes(primesArray, arraySize);
-	int *primeNumbers = getPrimeNumbers(primesArray, arraySize, newArraySize);
-	displayPrimeNumbers(primeNumbers, lowerBound, upperBound, newArraySize);
+	do {
+		int lowerBound, upperBound = 0;
+		int newArraySize;
+		int index = 0;
+		lowerBound = getLowerBoundary();
+		upperBound = getUpperBoundary();
+		checkBoundaries(lowerBound, upperBound);
+		int arraySize = upperBound;
+		int *primesArray = initializeArray(arraySize);
+		int factor = getIndexOfFirstZero(primesArray, arraySize);
+		findMultiplesOfFactors(factor, arraySize, primesArray);
+		convertZeroestoOnes(primesArray, arraySize);
+		int *primeNumbers = getPrimeNumbers(primesArray, arraySize, newArraySize);
+		displayPrimeNumbers(primeNumbers, lowerBound, upperBound, newArraySize);
+		repeat = repeatProcess();
+	} while (repeat == 'y' || repeat == 'Y');
+	quitProg();
 }
 
 void displayIntro() {
 	cout << "This program implements the Sieve of Eratosthenes"
 		<< endl << "algorithm to find all the prime numbers within"
 		<< endl << "a given range." << endl << endl;
+}
+
+void quitProg() {
+	cout << "You have quit the program." << endl;
+}
+
+char repeatProcess() {
+	char repeat;
+	cout << "Would you like to repeat this process?" << endl;
+	cout << "Enter y for yes, n for no: ";
+	cin >> repeat;
+	cout << endl;
+	return repeat;
 }
 
 int getLowerBoundary() {
@@ -114,13 +134,11 @@ void findMultiplesOfFactors(int factor, int arraySize, int *primesArray) {
 void findMultiples(int *primesArray, int size, int factor) {
 	int *factorIndex = primesArray + factor;
 	*factorIndex = 1;
-	int *start = factorIndex + 1;
+	int *start = factorIndex + factor;
 	int *last = primesArray + size;
 	while (start < last) {
-		if ((start - primesArray) % factor == 0) {
-			*start = -1;
-		}
-		start++;
+		*start = -1;
+		start += factor;
 	}
 }
 
@@ -138,6 +156,7 @@ int *getPrimeNumbers(int *primesArray, int size, int &newArraySize) {
 	int *start = primesArray;
 	int *last = primesArray + size;
 	int index = 0;
+	newArraySize = 0;
 	while (start < last) {
 		if (*start == 1) {
 			newArraySize++;
